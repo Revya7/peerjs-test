@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peer js Test first</title>
+</head>
+<body>
+
+    <input id="id" type="text" placeholder="id">
+    <button onclick="doIt()">Connect</button>
+    <button onclick="callHim()">Call</button>
+    <audio controls></audio>
+    <p id="idDisplay"></p>
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@0.3.20/dist/peer.min.js"></script>
+    <script>
+        var peer = new Peer({
+            host: "192.168.1.113",
+            port: 3500,
+            path: 'something/mypeer'
+        });
+
+
+        const mediaStream = new MediaStream();
+
+
+        peer.on('open', function(id) {
+            console.log('My peer ID is: ' + id);
+            document.getElementById("idDisplay").innerText = "My id is: " + id;
+        });
+
+        peer.on('connection', function(conn) {
+            console.log('Someone connected to me ahh');
+        });
+
+        peer.on('call', function(call) {
+            console.log('someone called me uhh');
+            onReceiveCall(call);
+
+        });
+
+
+        function doIt() {
+            let to = document.getElementById('id').value;
+            var conn = peer.connect(to);
+            
+            conn.on('open', function() {
+                // Receive messages
+                conn.on('data', function(data) {
+                    console.log('Received', data);
+                });
+
+                // Send messages
+                conn.send('Hello!');
+            });
+
+        }
+
+        function callHim() {
+            let to = document.getElementById('id').value;
+            getAudio(
+                function(MediaStream){
+
+                    console.log('now calling ' + to);
+                    var call = peer.call(to, MediaStream);
+                    call.on('stream', onReceiveStream);
+                },
+                function(err){
+                    console.log('an error occured while getting the audio');
+                    console.log(err);
+                }
+            );
+        }
+
+
+        function onReceiveCall(call){
+            console.log('peer is calling...');
+            console.log(call);
+
+            getAudio(
+                function(MediaStream){
+                    call.answer(MediaStream);
+                    console.log('answering call started...');
+                },
+                function(err){
+                    console.log('an error occured while getting the audio');
+                    console.log(err);
+                }
+            );
+
+            call.on('stream', onReceiveStream);
+        }
+
+
+        function onReceiveStream(stream){
+            var audio = document.querySelector('audio');
+            audio.srcObject = stream;
+            audio.onloadedmetadata = function(e){
+                console.log('now playing the audio');
+                audio.play();
+            }
+        }
+
+
+        function getAudio(successCallback, errorCallback){
+            navigator.getUserMedia({
+                audio: true,
+                video: false
+            }, successCallback, errorCallback);
+        }
+
+
+    </script>
+</body>
+</html>

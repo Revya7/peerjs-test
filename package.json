@@ -1,0 +1,21 @@
+{
+  "name": "peerjstest",
+  "version": "1.0.0",
+  "description": "peer to peer test",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "keywords": [
+    "peer",
+    "js"
+  ],
+  "author": "Mahdi Rev",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "peer": "^0.5.2",
+    "peerjs": "^1.2.0"
+  }
+}
