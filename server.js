@@ -3,7 +3,7 @@ const express = require('express');
 const { ExpressPeerServer } = require('peer');
 
 const app = express();
-// const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
 
 app.set("view engine", "ejs");
 
@@ -11,7 +11,7 @@ app.get('/', (req, res, next) => res.render('client.ejs'));
 
 // =======
 
-const server = app.listen(8080, "0.0.0.0");
+const server = app.listen(port, "0.0.0.0");
 
 const peerServer = ExpressPeerServer(server, {
   debug: true,
