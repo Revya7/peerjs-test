@@ -11,7 +11,7 @@ app.get('/', (req, res, next) => res.render('client.ejs'));
 
 // =======
 
-const server = app.listen(port, "localhost");
+const server = app.listen(port, "0.0.0.0");
 
 const peerServer = ExpressPeerServer(server, {
   debug: true,
