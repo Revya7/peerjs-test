@@ -9,7 +9,7 @@ app.get('/', (req, res, next) => res.render('client.ejs'));
 
 // =======
 
-const server = app.listen(3500, "192.168.1.113");
+const server = app.listen(80, "127.0.0.1");
 
 const peerServer = ExpressPeerServer(server, {
   debug: true,
